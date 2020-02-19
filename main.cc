@@ -10,24 +10,6 @@ int main()
 }
 
 
-// turn to maghsad va moving mitunam mecanize konam na dasti ( hal kardam!!!! )
-// robot ba az do mete jabejaie shoru mikone be peyda kradan wall haye rangi
-// moshkeli ke robot moghe bargasht az hamun masir mojaeh mishe
-// age robot wallo az dast bede moghe lern shodam robot motevajeh nemishe ( evalo tamum mikonim)
-// age hein learning ye masire jadid peyda kard chi kar konam (nemizarim peyda kone)
-// ax to ye otagh nazane!!!!
-
-// i Should write position control in fuzzy class for avoiding duplicate paths
-
-// image proccessing
-//mapping
-//optimize fuzzy hal shod
-// avoid repeat hal shod
-//align to target
-
-
-
-
 //    fl::Engine* engine = new fl::Engine("simple-dimmer");//
 
 //    fl::InputVariable* ambientLight = new fl::InputVariable;//
