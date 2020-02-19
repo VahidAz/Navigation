@@ -1,0 +1,97 @@
+FUNCTION_BLOCK qtfuzzylite
+
+VAR_INPUT
+leftob: REAL;
+frontob: REAL;
+rightob: REAL;
+END_VAR
+
+VAR_OUTPUT
+leftspd: REAL;
+rightspd: REAL;
+END_VAR
+
+FUZZIFY leftob
+RANGE := (0.000 .. 5.000);
+TERM near := Triangle (0.000, 0.000, 0.600);
+TERM med := Trapezoid (0.500, 1.000, 2.000, 2.500);
+TERM far := Triangle (2.000, 5.000, 5.000);
+END_FUZZIFY
+
+FUZZIFY frontob
+RANGE := (0.000 .. 5.000);
+TERM near := Triangle (0.000, 0.000, 0.600);
+TERM med := Trapezoid (0.500, 1.000, 2.000, 2.500);
+TERM far := Triangle (2.000, 5.000, 5.000);
+END_FUZZIFY
+
+FUZZIFY rightob
+RANGE := (0.000 .. 5.000);
+TERM near := Triangle (0.000, 0.000, 0.600);
+TERM med := Trapezoid (0.500, 1.000, 2.000, 2.500);
+TERM far := Triangle (2.000, 5.000, 5.000);
+END_FUZZIFY
+
+DEFUZZIFY leftspd
+RANGE := (-3.500 .. 3.500);
+TERM neghigh := Triangle (-3.500, -3.500, -1.500);
+TERM negavg := Trapezoid (-1.750, -1.500, -1.000, -0.750);
+TERM negslow := Triangle (-1.000, 0.000, 0.000);
+TERM posslow := Triangle (0.000, 0.000, 1.000);
+TERM posavg := Trapezoid (0.750, 1.000, 1.500, 1.750);
+TERM poshigh := Triangle (1.500, 3.500, 3.500);
+
+METHOD : COG;
+ACCU : MAX;
+DEFAULT := 0.000 | NC;
+END_DEFUZZIFY
+
+DEFUZZIFY rightspd
+RANGE := (-3.500 .. 3.500);
+TERM neghigh := Triangle (-3.500, -3.500, -1.500);
+TERM negavg := Trapezoid (-1.750, -1.500, -1.000, -0.750);
+TERM negslow := Triangle (-1.000, 0.000, 0.000);
+TERM posslow := Triangle (0.000, 0.000, 1.000);
+TERM posavg := Trapezoid (0.750, 1.000, 1.500, 1.750);
+TERM poshigh := Triangle (1.500, 3.500, 3.500);
+
+METHOD : COG;
+ACCU : MAX;
+DEFAULT := 0.000 | NC;
+END_DEFUZZIFY
+
+RULEBLOCK 
+AND : MIN;
+OR : MAX;
+ACT : MIN;
+
+RULE 1 : if leftob is near and frontob is near and rightob is near then leftspd is posavg and rightspd is negavg
+RULE 2 : if leftob is near and frontob is near and rightob is med then leftspd is posslow and rightspd is negslow
+RULE 3 : if leftob is near and frontob is near and rightob is far then leftspd is posslow and rightspd is negslow
+RULE 4 : if leftob is near and frontob is med and rightob is near then leftspd is posslow and rightspd is negslow
+RULE 5 : if leftob is near and frontob is med and rightob is med then leftspd is posslow and rightspd is negslow
+RULE 6 : if leftob is near and frontob is med and rightob is far then leftspd is posslow and rightspd is negslow
+RULE 7 : if leftob is near and frontob is far and rightob is near then leftspd is posslow and rightspd is negslow
+RULE 8 : if leftob is near and frontob is far and rightob is med then leftspd is posslow and rightspd is negslow
+RULE 9 : if leftob is near and frontob is far and rightob is far then leftspd is posslow and rightspd is negslow
+RULE 10 : if leftob is med and frontob is near and rightob is near then leftspd is negslow and rightspd is posslow
+RULE 11 : if leftob is med and frontob is near and rightob is med then leftspd is posslow and rightspd is negslow
+RULE 12 : if leftob is med and frontob is near and rightob is far then leftspd is posslow and rightspd is negslow
+RULE 13 : if leftob is med and frontob is med and rightob is near then leftspd is negslow and rightspd is posslow
+RULE 14 : if leftob is med and frontob is med and rightob is med then leftspd is posavg and rightspd is posavg
+RULE 15 : if leftob is med and frontob is med and rightob is far then leftspd is poshigh and rightspd is poshigh
+RULE 16 : if leftob is med and frontob is far and rightob is near then leftspd is negslow and rightspd is posslow
+RULE 17 : if leftob is med and frontob is far and rightob is med then leftspd is poshigh and rightspd is poshigh
+RULE 18 : if leftob is med and frontob is far and rightob is far then leftspd is poshigh and rightspd is poshigh
+RULE 19 : if leftob is far and frontob is near and rightob is near then leftspd is negslow and rightspd is posslow
+RULE 20 : if leftob is far and frontob is near and rightob is med then leftspd is negslow and rightspd is posslow
+RULE 21 : if leftob is far and frontob is near and rightob is far then leftspd is posslow and rightspd is negslow
+RULE 22 : if leftob is far and frontob is med and rightob is near then leftspd is negslow and rightspd is posslow
+RULE 23 : if leftob is far and frontob is med and rightob is med then leftspd is posavg and rightspd is posavg
+RULE 24 : if leftob is far and frontob is med and rightob is far then leftspd is poshigh and rightspd is poshigh
+RULE 25 : if leftob is far and frontob is far and rightob is near then leftspd is negslow and rightspd is posslow
+RULE 26 : if leftob is far and frontob is far and rightob is med then leftspd is poshigh and rightspd is poshigh
+RULE 27 : if leftob is far and frontob is far and rightob is far then leftspd is poshigh and rightspd is poshigh
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

@@ -1,0 +1,2 @@
+/usr/bin/ar cr libLA.a  CMakeFiles/LA.dir/LA.cc.o
+/usr/bin/ranlib libLA.a

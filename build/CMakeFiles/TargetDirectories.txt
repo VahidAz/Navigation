@@ -1,0 +1,4 @@
+/home/vahid/My_WorkSpace/Project_Code_6_Qt4/build/CMakeFiles/Fuzzy.dir
+/home/vahid/My_WorkSpace/Project_Code_6_Qt4/build/CMakeFiles/LA.dir
+/home/vahid/My_WorkSpace/Project_Code_6_Qt4/build/CMakeFiles/Manage.dir
+/home/vahid/My_WorkSpace/Project_Code_6_Qt4/build/CMakeFiles/main.dir

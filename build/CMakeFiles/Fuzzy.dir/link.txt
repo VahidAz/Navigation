@@ -1,0 +1,2 @@
+/usr/bin/ar cr libFuzzy.a  CMakeFiles/Fuzzy.dir/Fuzzy.cc.o
+/usr/bin/ranlib libFuzzy.a

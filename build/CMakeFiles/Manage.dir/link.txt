@@ -1,0 +1,2 @@
+/usr/bin/ar cr libManage.a  CMakeFiles/Manage.dir/Manage.cc.o
+/usr/bin/ranlib libManage.a

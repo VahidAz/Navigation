@@ -1,0 +1,135 @@
+FUNCTION_BLOCK qtfuzzylite
+
+VAR_INPUT
+leftOb: REAL;
+rightOb: REAL;
+centerOB: REAL;
+END_VAR
+
+VAR_OUTPUT
+leftWel: REAL;
+rightWel: REAL;
+END_VAR
+
+FUZZIFY leftOb
+RANGE := (0.000 .. 10.000);
+TERM vclose := Triangle (0.000, 0.400, 1.000);
+TERM close := Triangle (0.800, 1.500, 2.000);
+TERM med := Triangle (1.500, 3.000, 4.000);
+TERM far := Triangle (3.000, 5.000, 10.000);
+END_FUZZIFY
+
+FUZZIFY rightOb
+RANGE := (0.000 .. 10.000);
+TERM vclose := Triangle (0.000, 0.400, 1.000);
+TERM close := Triangle (0.800, 1.500, 2.000);
+TERM med := Triangle (1.500, 3.000, 4.000);
+TERM far := Triangle (3.000, 5.000, 10.000);
+END_FUZZIFY
+
+FUZZIFY centerOB
+RANGE := (0.000 .. 10.000);
+TERM vclose := Triangle (0.000, 0.400, 1.000);
+TERM close := Triangle (0.800, 1.500, 2.000);
+TERM med := Triangle (1.500, 3.000, 4.000);
+TERM far := Triangle (3.000, 5.000, 10.000);
+END_FUZZIFY
+
+DEFUZZIFY leftWel
+RANGE := (0.000 .. 5.000);
+TERM zero := Triangle (0.000, 0.000, 0.010);
+TERM vslow := Triangle (0.000, 0.200, 0.500);
+TERM slow := Triangle (0.400, 0.750, 1.000);
+TERM avg := Triangle (0.750, 1.500, 2.000);
+TERM high := Triangle (1.500, 2.500, 5.000);
+
+METHOD : COG;
+ACCU : MAX;
+DEFAULT := 0.000 | NC;
+END_DEFUZZIFY
+
+DEFUZZIFY rightWel
+RANGE := (0.000 .. 5.000);
+TERM zero := Triangle (0.000, 0.000, 0.010);
+TERM vslow := Triangle (0.000, 0.200, 0.500);
+TERM slow := Triangle (0.400, 0.750, 1.000);
+TERM avg := Triangle (0.750, 1.500, 2.000);
+TERM high := Triangle (1.500, 2.500, 5.000);
+
+METHOD : COG;
+ACCU : MAX;
+DEFAULT := 0.000 | NC;
+END_DEFUZZIFY
+
+RULEBLOCK 
+AND : MIN;
+OR : MAX;
+ACT : MIN;
+
+RULE 1 : if leftOb is vclose and rightOb is vclose and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 2 : if leftOb is vclose and rightOb is vclose and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 3 : if leftOb is vclose and rightOb is vclose and centerOB is med then leftWel is vslow and rightWel is vslow
+RULE 4 : if leftOb is vclose and rightOb is vclose and centerOB is far then leftWel is slow and rightWel is slow
+RULE 5 : if leftOb is vclose and rightOb is close and centerOB is vclose then leftWel is vslow and rightWel is zero
+RULE 6 : if leftOb is vclose and rightOb is close and centerOB is close then leftWel is vslow and rightWel is zero
+RULE 7 : if leftOb is vclose and rightOb is close and centerOB is med then leftWel is slow and rightWel is vslow
+RULE 8 : if leftOb is vclose and rightOb is close and centerOB is far then leftWel is slow and rightWel is vslow
+RULE 9 : if leftOb is vclose and rightOb is med and centerOB is vclose then leftWel is vslow and rightWel is zero
+RULE 10 : if leftOb is vclose and rightOb is med and centerOB is close then leftWel is vslow and rightWel is zero
+RULE 11 : if leftOb is vclose and rightOb is med and centerOB is med then leftWel is slow and rightWel is vslow
+RULE 12 : if leftOb is vclose and rightOb is med and centerOB is far then leftWel is avg and rightWel is slow
+RULE 13 : if leftOb is vclose and rightOb is far and centerOB is vclose then leftWel is vslow and rightWel is zero
+RULE 14 : if leftOb is vclose and rightOb is far and centerOB is close then leftWel is vslow and rightWel is zero
+RULE 15 : if leftOb is vclose and rightOb is far and centerOB is med then leftWel is slow and rightWel is vslow
+RULE 16 : if leftOb is vclose and rightOb is far and centerOB is far then leftWel is avg and rightWel is slow
+RULE 17 : if leftOb is close and rightOb is vclose and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 18 : if leftOb is close and rightOb is vclose and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 19 : if leftOb is close and rightOb is vclose and centerOB is med then leftWel is vslow and rightWel is slow
+RULE 20 : if leftOb is close and rightOb is vclose and centerOB is far then leftWel is vslow and rightWel is slow
+RULE 21 : if leftOb is close and rightOb is close and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 22 : if leftOb is close and rightOb is close and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 23 : if leftOb is close and rightOb is close and centerOB is med then leftWel is zero and rightWel is vslow
+RULE 24 : if leftOb is close and rightOb is close and centerOB is far then leftWel is avg and rightWel is avg
+RULE 25 : if leftOb is close and rightOb is med and centerOB is vclose then leftWel is vslow and rightWel is zero
+RULE 26 : if leftOb is close and rightOb is med and centerOB is close then leftWel is vslow and rightWel is zero
+RULE 27 : if leftOb is close and rightOb is med and centerOB is med then leftWel is slow and rightWel is vslow
+RULE 28 : if leftOb is close and rightOb is med and centerOB is far then leftWel is avg and rightWel is slow
+RULE 29 : if leftOb is close and rightOb is far and centerOB is vclose then leftWel is vslow and rightWel is zero
+RULE 30 : if leftOb is close and rightOb is far and centerOB is close then leftWel is vslow and rightWel is zero
+RULE 31 : if leftOb is close and rightOb is far and centerOB is med then leftWel is slow and rightWel is vslow
+RULE 32 : if leftOb is close and rightOb is far and centerOB is far then leftWel is avg and rightWel is slow
+RULE 33 : if leftOb is med and rightOb is vclose and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 34 : if leftOb is med and rightOb is vclose and centerOB is close then leftWel is vslow and rightWel is slow
+RULE 35 : if leftOb is med and rightOb is vclose and centerOB is med then leftWel is vslow and rightWel is slow
+RULE 36 : if leftOb is med and rightOb is vclose and centerOB is far then leftWel is slow and rightWel is avg
+RULE 37 : if leftOb is med and rightOb is close and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 38 : if leftOb is med and rightOb is close and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 39 : if leftOb is med and rightOb is close and centerOB is med then leftWel is vslow and rightWel is slow
+RULE 40 : if leftOb is med and rightOb is close and centerOB is far then leftWel is slow and rightWel is avg
+RULE 41 : if leftOb is med and rightOb is med and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 42 : if leftOb is med and rightOb is med and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 43 : if leftOb is med and rightOb is med and centerOB is med then leftWel is vslow and rightWel is vslow
+RULE 44 : if leftOb is med and rightOb is med and centerOB is far then leftWel is avg and rightWel is avg
+RULE 45 : if leftOb is med and rightOb is far and centerOB is vclose then leftWel is vslow and rightWel is zero
+RULE 46 : if leftOb is med and rightOb is far and centerOB is close then leftWel is vslow and rightWel is zero
+RULE 47 : if leftOb is med and rightOb is far and centerOB is med then leftWel is slow and rightWel is vslow
+RULE 48 : if leftOb is med and rightOb is far and centerOB is far then leftWel is avg and rightWel is slow
+RULE 49 : if leftOb is far and rightOb is vclose and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 50 : if leftOb is far and rightOb is vclose and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 51 : if leftOb is far and rightOb is vclose and centerOB is med then leftWel is zero and rightWel is vslow
+RULE 52 : if leftOb is far and rightOb is vclose and centerOB is far then leftWel is slow and rightWel is avg
+RULE 53 : if leftOb is far and rightOb is close and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 54 : if leftOb is far and rightOb is close and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 55 : if leftOb is far and rightOb is close and centerOB is med then leftWel is vslow and rightWel is slow
+RULE 56 : if leftOb is far and rightOb is close and centerOB is far then leftWel is slow and rightWel is avg
+RULE 57 : if leftOb is far and rightOb is med and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 58 : if leftOb is far and rightOb is med and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 59 : if leftOb is far and rightOb is med and centerOB is med then leftWel is vslow and rightWel is slow
+RULE 60 : if leftOb is far and rightOb is med and centerOB is far then leftWel is slow and rightWel is avg
+RULE 61 : if leftOb is far and rightOb is far and centerOB is vclose then leftWel is zero and rightWel is vslow
+RULE 62 : if leftOb is far and rightOb is far and centerOB is close then leftWel is zero and rightWel is vslow
+RULE 63 : if leftOb is far and rightOb is far and centerOB is med then leftWel is slow and rightWel is slow
+RULE 64 : if leftOb is far and rightOb is far and centerOB is far then leftWel is high and rightWel is high
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

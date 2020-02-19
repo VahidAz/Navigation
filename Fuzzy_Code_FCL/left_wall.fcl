@@ -1,0 +1,87 @@
+FUNCTION_BLOCK qtfuzzylite
+
+VAR_INPUT
+rightobR: REAL;
+frontobR: REAL;
+leftobR: REAL;
+END_VAR
+
+VAR_OUTPUT
+leftspdR: REAL;
+rightspdR: REAL;
+END_VAR
+
+FUZZIFY rightobR
+RANGE := (0.000 .. 5.000);
+TERM near := Triangle (0.000, 0.000, 0.400);
+TERM far := Triangle (0.200, 5.000, 5.000);
+END_FUZZIFY
+
+FUZZIFY frontobR
+RANGE := (0.000 .. 5.000);
+TERM near := Triangle (0.000, 0.000, 0.300);
+TERM med := Trapezoid (0.200, 0.350, 0.450, 0.650);
+TERM far := Triangle (0.500, 5.000, 5.000);
+END_FUZZIFY
+
+FUZZIFY leftobR
+RANGE := (0.000 .. 5.000);
+TERM near := Triangle (0.000, 0.000, 0.400);
+TERM med := Trapezoid (0.300, 0.450, 0.550, 0.650);
+TERM far := Triangle (0.550, 5.000, 5.000);
+END_FUZZIFY
+
+DEFUZZIFY leftspdR
+RANGE := (-3.500 .. 3.500);
+TERM neghigh := Triangle (-3.500, -3.500, -1.500);
+TERM negavg := Trapezoid (-1.750, -1.500, -1.000, -0.750);
+TERM negslow := Triangle (-1.000, 0.000, 0.000);
+TERM posslow := Triangle (0.000, 0.000, 1.000);
+TERM posavg := Trapezoid (0.750, 1.000, 1.500, 1.750);
+TERM poshigh := Triangle (1.500, 3.500, 3.500);
+
+METHOD : COG;
+ACCU : MAX;
+DEFAULT := 0.000 | NC;
+END_DEFUZZIFY
+
+DEFUZZIFY rightspdR
+RANGE := (-3.500 .. 3.500);
+TERM neghigh := Triangle (-3.500, -3.500, -1.500);
+TERM negavg := Trapezoid (-1.750, -1.500, -1.000, -0.750);
+TERM negslow := Triangle (-1.000, 0.000, 0.000);
+TERM posslow := Triangle (0.000, 0.000, 1.000);
+TERM posavg := Trapezoid (0.750, 1.000, 1.500, 1.750);
+TERM poshigh := Triangle (1.500, 3.500, 3.500);
+
+METHOD : COG;
+ACCU : MAX;
+DEFAULT := 0.000 | NC;
+END_DEFUZZIFY
+
+RULEBLOCK 
+AND : MIN;
+OR : MAX;
+ACT : MIN;
+
+RULE 1 : if rightobR is near and frontobR is near and leftobR is near then leftspdR is posslow and  rightspdR is negslow
+RULE 2 : if rightobR is near and frontobR is near and leftobR is med then leftspdR is posslow and  rightspdR is negslow
+RULE 3 : if rightobR is near and frontobR is near and leftobR is far then leftspdR is negslow and  rightspdR is posslow
+RULE 4 : if rightobR is near and frontobR is med and leftobR is near then leftspdR is posslow and  rightspdR is negslow
+RULE 5 : if rightobR is near and frontobR is med and leftobR is med then leftspdR is posslow and  rightspdR is negslow
+RULE 6 : if rightobR is near and frontobR is med and leftobR is far then leftspdR is negslow and  rightspdR is posslow
+RULE 7 : if rightobR is near and frontobR is far and leftobR is near then leftspdR is posslow and  rightspdR is negslow
+RULE 8 : if rightobR is near and frontobR is far and leftobR is med then leftspdR is posslow and  rightspdR is negslow
+RULE 9 : if rightobR is near and frontobR is far and leftobR is far then leftspdR is negslow and  rightspdR is posslow
+RULE 10 : if rightobR is far and frontobR is near and leftobR is near then leftspdR is posslow and  rightspdR is negslow
+RULE 11 : if rightobR is far and frontobR is near and leftobR is med then leftspdR is posslow and  rightspdR is negslow
+RULE 12 : if rightobR is far and frontobR is near and leftobR is far then leftspdR is negslow and  rightspdR is posslow
+RULE 13 : if rightobR is far and frontobR is med and leftobR is near then leftspdR is posslow and  rightspdR is negslow
+RULE 14 : if rightobR is far and frontobR is med and leftobR is med then leftspdR is posavg and  rightspdR is posavg
+RULE 15 : if rightobR is far and frontobR is med and leftobR is far then leftspdR is negslow and  rightspdR is posslow
+RULE 16 : if rightobR is far and frontobR is far and leftobR is near then leftspdR is posslow and  rightspdR is negslow
+RULE 17 : if rightobR is far and frontobR is far and leftobR is med then leftspdR is posavg and  rightspdR is posavg
+RULE 18 : if rightobR is far and frontobR is far and leftobR is far then leftspdR is negslow and  rightspdR is posslow
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
